@@ -368,6 +368,7 @@ footer .fnote{padding:0 clamp(18px,4vw,44px) 26px;color:rgba(255,255,255,.35);fo
 <div id="lbox"><button id="lclose" aria-label="Close">&#215;</button><div class="lframe"></div></div>
 <style>
 /* ---------- portal (dark reskin) ---------- */
+body.portal-on #top{display:none}
 #portal{min-height:100vh;background:var(--ink2)}
 .ptopbar{position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:14px clamp(16px,3vw,36px);background:rgba(20,17,20,.86);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .ptopbar .brand small{color:var(--gold)}
@@ -1013,7 +1014,7 @@ document.querySelectorAll(".mag").forEach(function(el){
 });
 /* cursor */
 var cur=document.getElementById("cursor"), cd=document.getElementById("cdot"), cr=document.getElementById("cring");
-var cx=innerWidth/2, cy=innerHeight/2, rx=cx, ry=cy;
+var cx=-100, cy=-100, rx=-100, ry=-100;
 document.addEventListener("pointermove",function(e){cx=e.clientX;cy=e.clientY;});
 (function loop(){rx+=(cx-rx)*.16;ry+=(cy-ry)*.16;
   if(cd){cd.style.left=cx+"px";cd.style.top=cy+"px";}
