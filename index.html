@@ -348,7 +348,6 @@ footer .fnote{padding:0 clamp(18px,4vw,44px) 26px;color:rgba(255,255,255,.35);fo
         <a href="https://www.youtube.com/@kpd-thebrixx" target="_blank" rel="noopener">YouTube</a>
         <a href="#/apply">Apply</a>
         <a href="#/join">Member login</a>
-        <a href="#/admin">Leadership</a>
       </div>
     </div>
     <div class="fnote">&copy; 2026 The Brixx Production &middot; Abraka, Nigeria. Portal data saves in your browser only; payments and video uploads are simulated in this build.</div>
@@ -474,7 +473,7 @@ function fmt(n){return "₦"+Number(n).toLocaleString("en-NG");}
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function go(r){location.hash="#/"+r;}
 var routes={home:1,apply:1,status:1,quiz:1,join:1,dash:1,pay:1,admin:1};
-var NAV=[["home","\u2190 The Brixx"],["apply","Join us"],["status","My application"],["join","Member login"],["admin","Leadership"]];
+var NAV=[["home","\u2190 The Brixx"],["apply","Join us"],["status","My application"],["join","Member login"]];
 function renderNav(){
   var r=(location.hash.replace("#/","")||"home");
   document.getElementById("nav").innerHTML=NAV.map(function(n){
