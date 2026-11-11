@@ -47,8 +47,8 @@ button{font-family:inherit}
 #progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:120;background:transparent}
 #progress i{display:block;height:100%;background:linear-gradient(90deg,var(--burg),var(--gold));transform-origin:left;transform:scaleX(0)}
 #cursor{position:fixed;top:0;left:0;z-index:190;pointer-events:none;mix-blend-mode:normal}
-#cdot{position:absolute;width:8px;height:8px;border-radius:2px;background:var(--gold);transform:translate(-50%,-50%) rotate(45deg)}
-#cring{position:absolute;width:34px;height:34px;border-radius:8px;border:1px solid rgba(247,182,56,.5);transform:translate(-50%,-50%) rotate(45deg);transition:width .2s,height .2s,border-color .2s,background .2s}
+#cdot{position:absolute;width:8px;height:8px;border-radius:2px;background:var(--gold);transform:translate(-50%,-50%) rotate(45deg);left:-100px;top:-100px}
+#cring{position:absolute;width:34px;height:34px;border-radius:8px;border:1px solid rgba(247,182,56,.5);transform:translate(-50%,-50%) rotate(45deg);left:-100px;top:-100px;transition:width .2s,height .2s,border-color .2s,background .2s}
 #cursor.hov #cring{width:52px;height:52px;background:rgba(247,182,56,.08);border-color:var(--gold)}
 @media (pointer:coarse){#cursor{display:none}}
 
@@ -59,7 +59,7 @@ button{font-family:inherit}
 .bmark{width:34px;height:34px;border-radius:6px;background:var(--burg);position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(120,1,21,.5);flex:none}
 .bmark::before{content:"";position:absolute;left:8px;top:9px;width:20px;height:5px;border-radius:1px;background:#fff;box-shadow:0 8px 0 #fff,0 0 0 3px var(--burg)}
 .brand b{font-family:var(--disp);font-size:1.15rem;letter-spacing:.08em;font-weight:400}
-.brand small{display:block;font-size:.55rem;letter-spacing:.42em;color:var(--gold);margin-top:-2px}
+.brand small{display:block;font-size:.55rem;letter-spacing:.42em;color:var(--gold2);margin-top:-2px;text-shadow:0 1px 8px rgba(0,0,0,.8)}
 #top nav{display:flex;align-items:center;gap:clamp(14px,2.4vw,30px)}
 #top nav a{font-size:.8rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);position:relative;padding:4px 0}
 #top nav a:not(.cta)::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .3s}
@@ -78,7 +78,7 @@ button{font-family:inherit}
 .herovid::after{content:"";position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 40%,transparent 55%,rgba(20,17,20,.75))}
 #bricks{position:absolute;inset:0;opacity:.55;pointer-events:none}
 .hero-inner{position:relative;z-index:3;width:100%;padding:0 clamp(18px,4vw,44px) clamp(64px,9vh,110px);max-width:1400px}
-.kicker{font-size:.72rem;font-weight:800;letter-spacing:.4em;color:var(--gold);margin-bottom:14px}
+.kicker{font-size:.72rem;font-weight:800;letter-spacing:.4em;color:var(--gold2);margin-bottom:14px;text-shadow:0 1px 10px rgba(0,0,0,.7)}
 .display{font-family:var(--disp);font-weight:400;line-height:.92;letter-spacing:.01em;text-transform:uppercase}
 h1.display{font-size:clamp(4.2rem,15vw,12.5rem)}
 h1.display .ch{display:inline-block;opacity:0;transform:translateY(.5em) rotate(6deg);transition:opacity .5s,transform .7s cubic-bezier(.2,.9,.3,1.15);transition-delay:calc(var(--i)*55ms)}
