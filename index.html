@@ -934,7 +934,7 @@ function finishLoad(){
 }
 if(reduced){finishLoad();}
 else{
-  var bricks=wall.children, letters=title.children, n=0, total=bricks.length+letters.length;
+  var bricks=wall?wall.children:[], letters=[], n=0, total=bricks.length;
   function tickBuild(){
     if(n<bricks.length){bricks[n].classList.add("on");n++;setTimeout(tickBuild,34);}
     else{llogo.classList.add("on");setTimeout(finishLoad,700);}
