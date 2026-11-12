@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>The Brixx — Leadership Admin</title>
-<meta name="description" content="The Brixx is a Nigerian drama house. We act: stage productions, films, skits and five-minute practicals. Watch our work, join the house, get your Brixx number.">
+<meta name="description" content="The Brixx is a global team of creatives. We make movies, drama, skits and stage productions. Watch our work, join the house, get your Brixx number.">
 <meta property="og:title" content="The Brixx — Leadership Admin">
 <meta property="og:description" content="Drama. Movies. Skits. Stage. Join the house.">
 <meta property="og:image" content="assets/poster.jpg">
@@ -229,6 +229,7 @@ footer .fnote{padding:0 clamp(18px,4vw,44px) 26px;color:rgba(255,255,255,.35);fo
   .rv{opacity:1;transform:none}
   .fillwords .w{opacity:1}
 }
+#sprog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),#ffd469);z-index:210;box-shadow:0 0 10px rgba(247,182,56,.6);transition:width .15s linear}
 </style>
 </head>
 <body>
@@ -283,7 +284,7 @@ function renderNav(){
   var r=(location.hash.replace("#/","")||"home");
   document.getElementById("nav").innerHTML=NAV.map(function(n){
     return '<a class="'+(r==n[0]?"on":"")+'" href="#/'+n[0]+'">'+n[1]+'</a>';
-  }).join("");
+  }).join("")+'';
 }
 window.addEventListener("hashchange",function(){renderNav();render();});
 function modal(html){var m=document.getElementById("modal");document.getElementById("modalbox").innerHTML=html;m.classList.add("open");}
@@ -461,8 +462,8 @@ function startQuiz(appId){
 function viewQuiz(){
   if(!quizState){
     document.getElementById("view").innerHTML='<div class="sec">Preliminary quiz</div>'+
-    '<div class="card"><p>This quiz only opens for shortlisted applicants. Enter the application ID that was shortlisted, or use the demo code <span class="idline">BRIXX-DEMO</span> to try the quiz experience.</p>'+
-    '<label>Application ID or demo code</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input id="q_id" style="flex:1;min-width:200px" placeholder="APP-2026-...."><button class="btn burg" onclick="quizEnter()">Continue</button></div>'+
+    '<div class="card"><p>This quiz only opens for shortlisted applicants. Enter the application ID that was shortlisted.</p>'+
+    '<label>Application ID</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input id="q_id" style="flex:1;min-width:200px" placeholder="APP-2026-...."><button class="btn burg" onclick="quizEnter()">Continue</button></div>'+
     '<div class="notice" style="margin-top:16px"><b>Rules:</b> '+QUIZ_MINS+' minutes, '+Q.length+' questions, '+PASS_MARK+'% to pass. Do not leave the tab: you get '+MAX_STRIKES+' warnings, then the quiz auto-submits. No copying text, no right-click.</div></div>';
     return;
   }
@@ -528,21 +529,41 @@ function finishQuiz(auto){
 function viewJoin(){
   document.getElementById("view").innerHTML='<div class="sec">Member login</div>'+
   '<div class="grid g2">'+
-  '<div class="card"><h3>Already a member?</h3><p class="stat">Enter your Brixx number. (Demo: try <span class="idline">BRX-26-0007</span> for the sample dashboard.)</p>'+
+  '<div class="card"><h3>Already have a Brixx number?</h3><p class="stat">Enter your Brixx number to open your dashboard.</p>'+
   '<label>Brixx number</label><input id="m_id" placeholder="BRX-26-....">'+
   '<button class="btn burg" style="margin-top:14px" onclick="memberLogin()">Open my dashboard</button></div>'+
   '<div class="card"><h3>New member, first time here?</h3><p class="stat">After the leadership team verifies your acceptance payment, you register your profile here. Your Brixx number is generated instantly.</p>'+
   '<label>Full name</label><input id="r_name"><div class="row"><div><label>Phone (WhatsApp)</label><input id="r_phone"></div><div><label>Department</label><select id="r_dept">'+["Acting","Music/Ministration","Dance","Stage & Production","Media & Design","Costume & Makeup"].map(function(x){return "<option>"+x+"</option>"}).join("")+'</select></div></div>'+
   '<label>Passport photograph</label><input type="file" id="r_photo" accept="image/*" onchange="pickPhoto(this)">'+
   '<div id="photoPrev" style="margin-top:10px"></div>'+
-  '<button class="btn gold" style="margin-top:14px" onclick="memberRegister()">Create my profile</button></div></div>';
+  '<button class="btn gold" style="margin-top:14px" onclick="memberRegister()">Create my profile</button></div>'+
+  '</div>'+
+  '<div class="card" style="margin-top:18px"><h3>In The Brixx already, but no number yet?</h3><p class="stat">For long-time members who joined before this portal. Send a claim and leadership will verify you and issue your Brixx number.</p>'+
+  '<div class="row"><div><label>Full name</label><input id="c_name"></div><div><label>Phone (WhatsApp)</label><input id="c_phone"></div></div>'+
+  '<div class="row"><div><label>Department / unit</label><select id="c_dept">'+["Acting","Music/Ministration","Dance","Stage & Production","Media & Design","Costume & Makeup"].map(function(x){return "<option>"+x+"</option>"}).join("")+'</select></div><div><label>Year you joined (optional)</label><input id="c_year" placeholder="e.g. 2024"></div></div>'+
+  '<button class="btn gold" style="margin-top:14px" onclick="claimNumber()">Send my claim</button></div>';
 }
 var pendingPhoto="";
 function pickPhoto(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){pendingPhoto=e.target.result;document.getElementById("photoPrev").innerHTML='<div class="avatar"><img src="'+pendingPhoto+'"></div>';};r.readAsDataURL(f);}
+function claimNumber(){
+  var name=(document.getElementById("c_name").value||"").trim(),ph=(document.getElementById("c_phone").value||"").trim();
+  if(!name||!ph){modal("<h3>Missing details</h3><p style='margin:10px 0'>Name and phone are required.</p><button class='btn burg' onclick='closeModal()'>Okay</button>");return;}
+  var cls=JSON.parse(localStorage.getItem("brixxClaims")||"[]");
+  cls.push({name:name,phone:ph,dept:document.getElementById("c_dept").value,year:(document.getElementById("c_year").value||"").trim(),ts:Date.now(),done:false});
+  localStorage.setItem("brixxClaims",JSON.stringify(cls));
+  modal("<h3>Claim sent</h3><p style='margin:10px 0'>Leadership will verify you and issue your Brixx number. Watch out for a message on "+esc(ph)+".</p><button class='btn gold' onclick='closeModal()'>Got it</button>");
+}
+function issueClaim(ci){
+  var cls=JSON.parse(localStorage.getItem("brixxClaims")||"[]");if(!cls[ci]||cls[ci].done)return;
+  var dbx=db(),n=dbx.members.length+1,id="BRX-26-"+String(n).padStart(4,"0");
+  dbx.members.push({id:id,name:cls[ci].name,phone:cls[ci].phone,dept:cls[ci].dept||"Acting",level:1,photo:"",joined:new Date().toISOString().slice(0,10),attendance:100,why:"Founding member."});
+  cls[ci].done=true;cls[ci].issued=id;save(dbx);localStorage.setItem("brixxClaims",JSON.stringify(cls));render();
+}
+function rejectClaim(ci){var cls=JSON.parse(localStorage.getItem("brixxClaims")||"[]");cls.splice(ci,1);localStorage.setItem("brixxClaims",JSON.stringify(cls));render();}
 function memberLogin(){
   var id=(document.getElementById("m_id").value||"").trim().toUpperCase();
   var dbx=db(),m=dbx.members.find(function(x){return x.id==id});
-  if(!m){modal("<h3>Not found</h3><p style='margin:10px 0'>No member with that number. If you just completed acceptance, register your profile on the right first.</p><button class='btn burg' onclick='closeModal()'>Okay</button>");return;}
+  if(!m){modal("<h3>Not found</h3><p style='margin:10px 0'>No member with that number. Register your profile below, or send a claim if you joined before the portal.</p><button class='btn burg' onclick='closeModal()'>Okay</button>");return;}
   localStorage.setItem("brixxSession",m.id);go("dash");
 }
 function memberRegister(){
@@ -609,7 +630,7 @@ function uploadProof(appId,inp){
 function viewAdmin(){
   if(!sessionStorage.getItem("brixxAdmin")){
     document.getElementById("view").innerHTML='<div class="sec">Leadership admin</div>'+
-    '<div class="card" style="max-width:440px"><h3 style="margin-bottom:6px">Leaders sign in</h3><p class="stat">Demo password: <span class="idline">brixxx2026</span></p>'+
+    '<div class="card" style="max-width:440px"><h3 style="margin-bottom:6px">Leaders sign in</h3>'+
     '<label>Password</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input id="a_pw" type="password" style="flex:1;min-width:180px" onkeydown="if(event.key===&quot;Enter&quot;)adminLogin()"><button class="btn burg" onclick="adminLogin()">Enter</button></div></div>';
     return;
   }
@@ -620,6 +641,15 @@ function viewAdmin(){
   function stat(v,l){return '<div class="card" style="text-align:center;padding:18px 8px"><div class="big">'+v+'</div><div class="stat" style="margin-top:4px;font-weight:600">'+l+'</div></div>';}
   var h='<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="sec" style="margin:0;flex:1;min-width:220px">Leadership admin</div><button class="btn sm gold" onclick="exportCsv()">Export CSV</button><button class="btn sm line" onclick="sessionStorage.removeItem(\'brixxAdmin\');render()">Log out</button></div>';
   h+='<div class="grid g3" style="margin-top:16px">'+stat(apps.length,'Applications')+stat(c["quiz-unlocked"],'Shortlisted')+stat(c["quiz-done"],'Quiz passed')+stat(c.selected,'Selected')+stat(members.length,'Members')+stat(fmt(rev),'Verified fees')+'</div>';
+  var cls=JSON.parse(localStorage.getItem("brixxClaims")||"[]"),pend=cls.filter(function(x){return !x.done});
+  if(pend.length){
+    h+='<div class="card" style="margin-top:18px"><h3>Member number claims ('+pend.length+' pending)</h3><p class="stat">Long-time members without a number. Verify them, then issue their Brixx number.</p>';
+    pend.forEach(function(c){
+      var ci=cls.indexOf(c);
+      h+='<div class="row" style="align-items:center;border-top:1px solid var(--line);padding:12px 0"><div style="flex:1;min-width:180px"><b>'+esc(c.name)+'</b><div class="stat">'+esc(c.phone)+' \u00b7 '+esc(c.dept||"")+(c.year?' \u00b7 joined '+esc(c.year):'')+'</div></div><button class="btn sm gold" onclick="issueClaim('+ci+')">Issue number</button><button class="btn sm line" onclick="rejectClaim('+ci+')">Reject</button></div>';
+    });
+    h+='</div>';
+  }
   h+='<div class="card" style="margin-top:16px"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px"><h3 style="margin:0;flex:1;min-width:160px">Applications ('+apps.length+')</h3><select id="ad_f" onchange="adminFilter()" style="width:auto"><option value="">All statuses</option><option value="submitted">Submitted</option><option value="quiz-unlocked">Shortlisted / quiz open</option><option value="quiz-done">Quiz passed</option><option value="quiz-done-fail">Quiz failed</option><option value="selected">Selected</option><option value="member">Member</option><option value="rejected">Rejected</option></select><input id="ad_q" placeholder="Search name, ID, dept, phone..." style="flex:1;min-width:180px;margin:0" oninput="adminFilter()"></div><div id="ad_tbl">'+adminAppsTable(apps)+'</div></div>';
   h+='<div class="card" style="margin-top:16px"><h3>Payments ('+pays.length+')</h3>'+(pays.length?'<table><tr><th>Application</th><th>Amount</th><th>Proof</th><th>Status</th></tr>'+pays.map(function(p){return '<tr><td class="idline">'+p.app+'</td><td>'+fmt(p.amount)+'</td><td class="stat">'+esc(p.proof)+'</td><td>'+(p.status=="verified"?'<span class="pill mem">Verified</span>':'<span class="pill pay">Awaiting check</span>')+'</td></tr>'}).join("")+'</table>':'<p class="stat">No payments recorded yet.</p>')+'</div>';
   h+='<div class="card" style="margin-top:16px"><h3>Members ('+members.length+')</h3>'+(members.length?'<table><tr><th>ID</th><th>Name</th><th>Dept</th><th>Level</th><th>Attendance</th></tr>'+members.map(function(m){return '<tr><td class="idline">'+m.id+'</td><td>'+esc(m.name)+'</td><td>'+esc(m.dept)+'</td><td>L'+m.level+'</td><td>'+m.attendance+'%</td></tr>'}).join("")+'</table>':'<p class="stat">No members yet. Verify a selected applicant\'s fee to add the first one.</p>')+'</div>';
