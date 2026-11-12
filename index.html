@@ -6,8 +6,16 @@
 <title>The Brixx — We Act. Drama, Movies, Skits, Stage</title>
 <meta name="description" content="The Brixx is a global team of creatives. We make movies, drama, skits and stage productions. Watch our work, join the house, get your Brixx number.">
 <meta property="og:title" content="The Brixx — We Act.">
-<meta property="og:description" content="Drama. Movies. Skits. Stage. Join the house.">
-<meta property="og:image" content="assets/poster.jpg">
+<meta property="og:description" content="A global team of creatives. Movies. Drama. Skits. Stage. Join the house.">
+<meta property="og:image" content="https://brixx-portal.vercel.app/assets/social.jpg">
+<meta property="og:url" content="https://brixx-portal.vercel.app">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The Brixx — We Act.">
+<meta name="twitter:description" content="A global team of creatives. Movies. Drama. Skits. Stage. Join the house.">
+<meta name="twitter:image" content="https://brixx-portal.vercel.app/assets/social.jpg">
+<meta name="theme-color" content="#780115">
+<link rel="apple-touch-icon" href="assets/logo.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"The Brixx Production","slogan":"Shaping tomorrow, one story at a time.","url":"https://brixx-portal.vercel.app","logo":"https://brixx-portal.vercel.app/assets/logo.png","sameAs":["https://www.youtube.com/@kpd-thebrixx"]}</script>
 <link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -261,6 +269,10 @@ a{transition:color .25s}
 @media (max-width:820px){.heroframe video{animation:kb2 14s ease-in-out infinite alternate}}
 @keyframes kb2{from{transform:scale(1)}to{transform:scale(1.06)}}
 
+/* ---------- portal card glow ---------- */
+#view .card{transition:border-color .3s,box-shadow .3s}
+#view .card:hover{border-color:rgba(247,182,56,.3);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+
 /* ---------- reveal ---------- */
 .rv{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.2,.7,.3,1),transform .8s cubic-bezier(.2,.7,.3,1);transition-delay:calc(var(--i,0)*70ms)}
 .rv.in{opacity:1;transform:none}
@@ -418,7 +430,7 @@ a{transition:color .25s}
         <a href="#/join">Member login</a>
       </div>
     </div>
-    <div class="fnote">&copy; 2026 The Brixx Production &middot; Abraka, Nigeria. Portal data saves in your browser only; payments and video uploads are simulated in this build.</div>
+    <div class="fnote">&copy; 2026 The Brixx Production &middot; Abraka, Nigeria. Portal data saves in your browser for now. Online payments and video uploads are coming in the next update.</div>
   </footer>
 
 </main>
