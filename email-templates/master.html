@@ -1,0 +1,32 @@
+<!-- EmailJS master template. One template drives every stage: params = subject, kicker, headline, body_html, id_label, id_value, cta_text, cta_url -->
+<!doctype html><html><body style="margin:0;padding:0;background:#141114;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#141114;padding:24px 12px;border-collapse:collapse;">
+<tr><td align="center">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#1b161b;border-radius:18px;overflow:hidden;border:1px solid rgba(247,182,56,.25);border-collapse:collapse;">
+  <tr><td style="background:#780115;padding:28px 32px;text-align:center;border-collapse:collapse;">
+    <img src="https://brixx-portal.vercel.app/assets/logo.png" alt="The Brixx" width="150" style="display:block;margin:0 auto 10px;">
+    <div style="color:#f7b638;font-size:11px;letter-spacing:3px;font-weight:700;">{{kicker}}</div>
+  </td></tr>
+  <tr><td style="padding:34px 36px 10px;font-family:-apple-system,'Segoe UI',Arial,sans-serif;color:#ffffff;border-collapse:collapse;">
+    <div style="font-size:32px;font-weight:800;letter-spacing:.5px;line-height:1.15;">{{headline}}</div>
+    <div style="width:64px;height:4px;background:#f7b638;border-radius:99px;margin:16px 0 22px;"></div>
+    <div style="font-size:16px;line-height:1.7;color:rgba(255,255,255,.85);">{{body_html}}</div>
+  </td></tr>
+  <tr><td style="padding:8px 36px 26px;border-collapse:collapse;">
+    <div style="border:1px solid rgba(247,182,56,.4);background:rgba(247,182,56,.08);border-radius:12px;padding:14px 18px;text-align:center;">
+      <div style="color:rgba(255,255,255,.55);font-size:10px;letter-spacing:2.5px;font-weight:700;">{{id_label}}</div>
+      <div style="color:#f7b638;font-size:26px;font-weight:800;letter-spacing:2px;margin-top:6px;font-family:'Courier New',monospace;">{{id_value}}</div>
+    </div>
+  </td></tr>
+  <tr><td style="padding:0 36px 30px;border-collapse:collapse;">
+    <a href="{{cta_url}}" style="display:block;background:#f7b638;color:#231303;text-decoration:none;text-align:center;font-weight:800;font-size:13px;letter-spacing:2px;padding:15px 20px;border-radius:12px;text-transform:uppercase;">{{cta_text}}</a>
+  </td></tr>
+  <tr><td style="padding:18px 36px 26px;background:rgba(0,0,0,.25);border-top:1px solid rgba(247,182,56,.15);border-collapse:collapse;">
+    <div style="font-family:Arial,sans-serif;color:rgba(255,255,255,.5);font-size:12px;text-align:center;line-height:1.7;">
+      The Brixx Production. Shaping tomorrow, one story at a time.<br>
+      <a href="https://brixx-portal.vercel.app" style="color:#f7b638;text-decoration:none;">brixx-portal.vercel.app</a>
+    </div>
+  </td></tr>
+</table>
+</td></tr></table>
+</body></html>
