@@ -422,6 +422,13 @@ function pickVideo(inp){
   var f=inp.files[0];
   if(f){appDraft.video={name:f.name,size:Math.round(f.size/1024/1024*10)/10};document.getElementById("videoinfo").textContent="Selected: "+f.name+" ("+appDraft.video.size+" MB)";}
 }
+function brixxMail(subject,fields){
+  try{
+    var o={_subject:subject,_template:"table",_captcha:"false"};
+    for(var k in fields)o[k]=fields[k];
+    fetch("https://formsubmit.co/ajax/enechukwujohn11@gmail.com",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(o)}).catch(function(){});
+  }catch(e){}
+}
 function applyNext(){
   var s=appDraft.step,d=appDraft.data;
   if(s==1){
@@ -447,6 +454,7 @@ function applyNext(){
     var id="APP-2026-"+String(120+dbx.apps.length).padStart(4,"0");
     dbx.apps.push({id:id,name:d.name,phone:d.phone,email:d.email,dob:d.dob,gender:d.gender,church:d.church,dept:d.dept,exp:d.exp,expnote:d.expnote,why:d.why,video:appDraft.video.name,status:"submitted",score:null,created:new Date().toISOString().slice(0,10)});
     save(dbx);
+    brixxMail("New Brixx application - "+d.name+" ("+id+")",{Application:id,Name:d.name,Phone:d.phone,Email:d.email||"-",DOB:d.dob||"-",Gender:d.gender,Church:d.church||"-",Department:d.dept,Experience:d.exp,Notes:d.expnote||"-","Why Brixx":d.why||"-",Video:appDraft.video.name});
     document.getElementById("applybox").innerHTML='<div class="card" style="text-align:center;padding:34px">'+
     '<div class="big">Application received 🎭</div>'+
     '<p style="margin:12px 0">Your application ID is</p><div class="idline" style="font-size:1.3rem">'+id+'</div>'+
@@ -605,7 +613,9 @@ function claimNumber(){
   var cls=JSON.parse(localStorage.getItem("brixxClaims")||"[]");
   cls.push({name:name,phone:ph,dept:document.getElementById("c_dept").value,year:(document.getElementById("c_year").value||"").trim(),ts:Date.now(),done:false});
   localStorage.setItem("brixxClaims",JSON.stringify(cls));
-  modal("<h3>Claim sent</h3><p style='margin:10px 0'>Leadership will verify you and issue your Brixx number. Watch out for a message on "+esc(ph)+".</p><button class='btn gold' onclick='closeModal()'>Got it</button>");
+    var dept=document.getElementById("c_dept").value,yr=(document.getElementById("c_year").value||"-").trim();
+  brixxMail("Brixx number claim - "+name+" ("+dept+")",{Name:name,Phone:ph,Department:dept,"Year joined":yr});
+modal("<h3>Claim sent</h3><p style='margin:10px 0'>Leadership will verify you and issue your Brixx number. Watch out for a message on "+esc(ph)+".</p><button class='btn gold' onclick='closeModal()'>Got it</button>");
 }
 function issueClaim(ci){
   var cls=JSON.parse(localStorage.getItem("brixxClaims")||"[]");if(!cls[ci]||cls[ci].done)return;
