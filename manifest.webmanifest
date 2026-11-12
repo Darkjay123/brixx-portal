@@ -1,0 +1,15 @@
+{
+ "name": "The Brixx Production",
+ "short_name": "The Brixx",
+ "start_url": "/",
+ "display": "standalone",
+ "background_color": "#141114",
+ "theme_color": "#780115",
+ "icons": [
+  {
+   "src": "/assets/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  }
+ ]
+}
