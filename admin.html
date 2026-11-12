@@ -285,6 +285,7 @@ input[type=file]::file-selector-button:hover{transform:translateY(-2px)}
 }
 #sprog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),#ffd469);z-index:210;box-shadow:0 0 10px rgba(247,182,56,.6);transition:width .15s linear}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 <div id="portal">
@@ -429,6 +430,29 @@ function brixxMail(subject,fields){
     fetch("https://formsubmit.co/ajax/e256709dc3f945cca670261f94f88c32",{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(o)}).catch(function(){});
   }catch(e){}
 }
+/* ---- EmailJS applicant mail (Brixx master template) ---- */
+var EJS_CFG={key:"A1tIHIFB-rfKmkTqs",tpl:"7xpu5d2",svc:"service_afcyngq"};
+var BRIXX_MAIL={base:"https://brixx-portal.vercel.app",stages:{
+application_received:{subject:"The Brixx \u2014 we got your audition",kicker:"APPLICATION RECEIVED",headline:"WE GOT YOUR AUDITION.",id_label:"YOUR APPLICATION ID",body:function(n,a){return "Hi "+n+", thank you for applying to The Brixx Production. Your application "+a+" is in, and your monologue video is with us. Leadership reviews monologues every week. If you are shortlisted, your preliminary quiz unlocks on your status page and we will write to you here. Keep your phone close.";},cta_text:"Track my application",cta_url:"https://brixx-portal.vercel.app/#/status"},
+shortlisted:{subject:"The Brixx \u2014 you are shortlisted",kicker:"NEXT STAGE UNLOCKED",headline:"YOU ARE SHORTLISTED.",id_label:"YOUR APPLICATION ID",body:function(n,a){return "Hi "+n+", good news. Your monologue stood out, and leadership has unlocked your preliminary quiz on your status page. You have ten minutes once you start, so read the Brixx manual on the same page first. Take a breath, then go and show us.";},cta_text:"Open my status page",cta_url:"https://brixx-portal.vercel.app/#/status"},
+selected:{subject:"The Brixx \u2014 welcome to the team",kicker:"SELECTION DECISION",headline:"WELCOME TO THE BRIXX.",id_label:"YOUR APPLICATION ID",body:function(n,a){return "Hi "+n+", you made it. Leadership has selected you to join The Brixx Production. Your acceptance fee confirms your place: pay by bank transfer to the account on your status page, then register your member profile. We cannot wait to see what you bring to the stage.";},cta_text:"Complete my acceptance",cta_url:"https://brixx-portal.vercel.app/#/status"},
+not_selected:{subject:"The Brixx \u2014 this cycle\u2019s decision",kicker:"SELECTION DECISION",headline:"NOT THIS CYCLE. DOOR\u2019S OPEN.",id_label:"YOUR APPLICATION ID",body:function(n){return "Hi "+n+", thank you for auditioning with us. This time we are not moving your application forward, but that is a no for this cycle, not for you. Doors open again soon, and we would love to see you try again. Keep acting.";},cta_text:"Visit the portal",cta_url:"https://brixx-portal.vercel.app"},
+member_number:{subject:"The Brixx \u2014 your member number",kicker:"MEMBER ID ISSUED",headline:"YOUR BRIXX NUMBER IS READY.",id_label:"YOUR BRIXX NUMBER",body:function(n){return "Hi "+n+", welcome to the register. This is your permanent member number. Guard it: you will use it every time you sign in to the portal.";},cta_text:"Open my dashboard",cta_url:"https://brixx-portal.vercel.app/#/join"},
+claim_received:{subject:"The Brixx \u2014 your claim is in",kicker:"CLAIM RECEIVED",headline:"WE REMEMBER YOU.",id_label:"YOUR CLAIM",body:function(n){return "Hi "+n+", your claim is in. Leadership will verify you against our records and issue your Brixx number. Watch out for a message on the WhatsApp number you gave.";},cta_text:"Visit the portal",cta_url:"https://brixx-portal.vercel.app"}
+}};
+function brixxSend(stage,name,email,appid){
+  try{
+    if(!email||!window.emailjs)return;
+    var s=BRIXX_MAIL.stages[stage];if(!s)return;
+    emailjs.init(EJS_CFG.key);
+    emailjs.send(EJS_CFG.svc,EJS_CFG.tpl,{
+      subject:s.subject,kicker:s.kicker,headline:s.headline,
+      body_html:s.body(name,appid),id_label:s.id_label,id_value:appid||"",
+      cta_text:s.cta_text,cta_url:s.cta_url,to_email:email
+    }).catch(function(){});
+  }catch(e){}
+}
+
 function applyNext(){
   var s=appDraft.step,d=appDraft.data;
   if(s==1){
@@ -455,6 +479,7 @@ function applyNext(){
     dbx.apps.push({id:id,name:d.name,phone:d.phone,email:d.email,dob:d.dob,gender:d.gender,church:d.church,dept:d.dept,exp:d.exp,expnote:d.expnote,why:d.why,video:appDraft.video.name,status:"submitted",score:null,created:new Date().toISOString().slice(0,10)});
     save(dbx);
     brixxMail("New Brixx application - "+d.name+" ("+id+")",{Application:id,Name:d.name,Phone:d.phone,Email:d.email||"-",DOB:d.dob||"-",Gender:d.gender,Church:d.church||"-",Department:d.dept,Experience:d.exp,Notes:d.expnote||"-","Why Brixx":d.why||"-",Video:appDraft.video.name});
+    brixxSend("application_received",d.name,d.email,id);
     document.getElementById("applybox").innerHTML='<div class="card" style="text-align:center;padding:34px">'+
     '<div class="big">Application received 🎭</div>'+
     '<p style="margin:12px 0">Your application ID is</p><div class="idline" style="font-size:1.3rem">'+id+'</div>'+
@@ -763,6 +788,10 @@ function act(kind,appId){
     skills:[["Stage presence",40],["Voice & projection",40],["Script & memorisation",40],["Improvisation",35],["Discipline & attendance",100],["Teamwork",50]],log:[["Today","Welcome to The Brixx","Profile created from application "+appId+". Level 1 (Probationer) begins."]]});
     a.brixId=id;
   }
+  if(kind=="shortlist")brixxSend("shortlisted",a.name,a.email,a.id);
+  else if(kind=="reject")brixxSend("not_selected",a.name,a.email,a.id);
+  else if(kind=="select")brixxSend("selected",a.name,a.email,a.id);
+  else if(kind=="confirmpay")brixxSend("member_number",a.name,a.email,a.brixId);
   save(dbx);render();
 }
 function postAnn(){
